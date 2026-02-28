@@ -264,10 +264,8 @@ try:
                     time.sleep(2)
                 log(f"first game state: {game_state}")
             else:
-                loop = asyncio.new_event_loop()
-                asyncio.set_event_loop(loop)
                 previous_game_state = game_state
-                game_state = loop.run_until_complete(
+                game_state = asyncio.run(
                     Wss.recconect_to_websocket(game_state)
                 )
                 # We invalidate the cached responses when going from any state to menus
@@ -277,7 +275,6 @@ try:
                     if hasattr(pstats, "clear_runtime_cache"):
                         pstats.clear_runtime_cache()
                 log(f"new game state: {game_state}")
-                loop.close()
             firstTime = False
         except TypeError:
             game_state = "DISCONNECTED"
