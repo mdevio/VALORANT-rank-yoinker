@@ -1,4 +1,4 @@
-from colr import color
+from src.colors import color
 
 version = "2.96"
 enablePrivateLogging = True
