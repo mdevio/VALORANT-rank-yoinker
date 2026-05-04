@@ -204,7 +204,8 @@ DEFAULT_CONFIG = {
         "headshot_percent": True,
         "winrate": True,
         "kd": False,
-        "level": True
+        "level": True,
+        "last_active": True
     },
     "flags": {
         "last_played": True,
