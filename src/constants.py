@@ -1,4 +1,3 @@
-import requests
 from colr import color
 
 version = "2.94"
