@@ -231,13 +231,6 @@ try:
             Ranks = NUMBERTORANKS
 
         try:
-
-            # loop = asyncio.get_event_loop()
-            # loop.run_until_complete(Wss.conntect_to_websocket())
-            # if firstTime:
-            #     loop = asyncio.new_event_loop()
-            #     asyncio.set_event_loop(loop)
-            #     game_state = loop.run_until_complete(Wss.conntect_to_websocket(game_state))
             if firstTime:
                 run = True
                 while run:
@@ -268,9 +261,6 @@ try:
                 log(f"new game state: {game_state}")
                 loop.close()
             firstTime = False
-            # loop = asyncio.new_event_loop()
-            # asyncio.set_event_loop(loop)
-            # loop.run_until_complete()
         except TypeError:
             game_state = "DISCONNECTED"
             reset_match_player_cache()
@@ -394,7 +384,6 @@ try:
                 )
                 loadouts = loadouts_arr[0]
                 loadouts_data = loadouts_arr[1]
-                # with alive_bar(total=len(Players), title='Fetching Players', bar='classic2') as bar:
                 isRange = False
                 playersLoaded = 1
 
@@ -441,7 +430,6 @@ try:
                                     and len(stats_data[player["Subject"]]) > i
                                 ):
                                     i += 1
-                                    # if curr_player_stat["match_id"] == coregame.match_id and len(stats_data[player["Subject"]]) > 1:
                                     curr_player_stat = stats_data[player["Subject"]][-i]
                                 if curr_player_stat["match_id"] != coregame.match_id:
                                     # checking for party memebers and self players
@@ -516,13 +504,6 @@ try:
                                         + "rr",
                                     }
                                 )
-                        # rankStatus = playerRank[1]
-                        # useless code since rate limit is handled in the requestsV
-                        # while not rankStatus:
-                        #     print("You have been rate limited, 😞 waiting 10 seconds!")
-                        #     time.sleep(10)
-                        #     playerRank = rank.get_rank(player["Subject"], seasonID)
-                        #     rankStatus = playerRank[1]
 
                         hs = ppstats["hs"]
                         kd = ppstats["kd"]
@@ -579,9 +560,6 @@ try:
                         # NAME
                         name = Namecolor
 
-                        # VIEWS
-                        # views = get_views(names[player["Subject"]])
-
                         # skin
                         skin = loadouts.get(player["Subject"], "")
 
@@ -632,7 +610,6 @@ try:
                                 party_icon,
                                 agent,
                                 name,
-                                # views,
                                 skin,
                                 rankName,
                                 rr,
@@ -710,7 +687,6 @@ try:
                 #   state="pregame")
                 playersLoaded = 1
                 with richConsole.status("Loading Players...") as status:
-                    # with alive_bar(total=len(Players), title='Fetching Players', bar='classic2') as bar:
                     presence = presences.get_presence()
                     partyOBJ = menu.get_party_json(
                         namesClass.get_players_puuid(Players), presence
@@ -764,14 +740,6 @@ try:
                                         + "rr",
                                     }
                                 )
-                        # rankStatus = playerRank[1]
-                        # useless code since rate limit is handled in the requestsV
-                        # while not rankStatus:
-                        #     print("You have been rate limited, 😞 waiting 10 seconds!")
-                        #     time.sleep(10)
-                        #     playerRank = rank.get_rank(player["Subject"], seasonID)
-                        #     rankStatus = playerRank[1]
-                        # playerRank = playerRank[0]
 
                         hs = ppstats["hs"]
                         kd = ppstats["kd"]
@@ -834,9 +802,6 @@ try:
                         # NAME
                         name = NameColor
 
-                        # VIEWS
-                        # views = get_views(names[player["Subject"]])
-
                         # temporary until other regions gets fixed?
                         # skin
                         # skin = loadouts[player["Subject"]]
@@ -888,7 +853,6 @@ try:
                                 party_icon,
                                 agent,
                                 name,
-                                # views,
                                 "",
                                 rankName,
                                 rr,
@@ -917,7 +881,6 @@ try:
                             "winPercentage": f"{playerRank['wr']} ({playerRank['numberofgames']})",
                         }
 
-                        # bar()
             if game_state == "MENUS":
                 reset_match_player_cache()
                 if hasattr(pstats, "clear_runtime_cache"):
@@ -929,7 +892,6 @@ try:
                 names = namesClass.get_names_from_puuids(Players)
                 playersLoaded = 1
                 with richConsole.status("Loading Players...") as status:
-                    # with alive_bar(total=len(Players), title='Fetching Players', bar='classic2') as bar:
                     # log(f"retrieved names dict: {names}")
                     Players.sort(
                         key=lambda Players: Players["PlayerIdentity"].get(
@@ -963,15 +925,6 @@ try:
                                             + "rr",
                                         }
                                     )
-
-                            # rankStatus = playerRank[1]
-                            # useless code since rate limit is handled in the requestsV
-                            # while not rankStatus:
-                            #     print("You have been rate limited, 😞 waiting 10 seconds!")
-                            #     time.sleep(10)
-                            #     playerRank = rank.get_rank(player["Subject"], seasonID)
-                            #     rankStatus = playerRank[1]
-                            # playerRank = playerRank["rank"]
 
                             ppstats = pstats.get_stats(player["Subject"])
                             hs = ppstats["hs"]
@@ -1068,10 +1021,8 @@ try:
                                 "winPercentage": f"{playerRank['wr']} ({playerRank['numberofgames']})",
                             }
 
-                            # bar()
                     seen.append(player["Subject"])
             if (title := game_state_dict.get(game_state)) is None:
-                # program_exit(1)
                 time.sleep(9)
             
             title_parts = [f"VALORANT status: {title}"]
