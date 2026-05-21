@@ -7,13 +7,6 @@
 [![Discord][discord-shield]][discord-url]
 [![Downloads][downloads-shield]][downloads-url]
 
-> [!CAUTION]
-> vRY has published its final release, no changes will be made to the code.
-> 
-> [Community forks](COMMUNITY.md) may be maintained.
-
----
-
   <ol>
     <li><a href="#about-the-project">About The Project</a></li>
     <li><a href="#usage">Usage</a></li>
