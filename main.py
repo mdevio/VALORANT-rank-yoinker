@@ -682,9 +682,8 @@ try:
                 names = namesClass.get_names_from_puuids(Players)
                 pregame_match_id = pregame_stats.get("ID")
                 ensure_match_player_cache(pregame_match_id)
-                # temporary until other regions gets fixed?
-                # loadouts = loadoutsClass.get_match_loadouts(pregame.get_pregame_match_id(), pregame_stats, cfg.weapon, valoApiSkins, names,
-                #   state="pregame")
+                loadouts = loadoutsClass.get_match_loadouts(pregame.get_pregame_match_id(), pregame_stats, cfg.weapon, valoApiSkins, names,
+                  state="pregame")
                 playersLoaded = 1
                 with richConsole.status("Loading Players...") as status:
                     presence = presences.get_presence()
@@ -802,9 +801,8 @@ try:
                         # NAME
                         name = NameColor
 
-                        # temporary until other regions gets fixed?
-                        # skin
-                        # skin = loadouts[player["Subject"]]
+                        # SKIN
+                        skin = loadouts[player["Subject"]]
 
                         # RANK
                         rankName = Ranks[playerRank["rank"]]
