@@ -63,7 +63,7 @@ class Table:
             bool(config.table.get("kd", True)),  # KD
             bool(config.table.get("level", True)),  # Level
             bool(config.table.get("earned_rr", True)),  # Earned RR
-            bool(config.table.get("last_active", True)),  # Last Active
+            bool(config.table.get("last_active", False)),  # Last Active
         ]
         self.runtime_col_flags = self.col_flags[:]  # making a copy
         

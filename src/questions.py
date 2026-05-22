@@ -12,7 +12,7 @@ TABLE_OPTS = {
     "winrate": "WinRate",
     "kd": "K/D Ratio <!> Last Game Only <!>",
     "level": "Account Level",
-    "last_active": "Last Competitive Active"
+    "last_active": "Last Competitive Activity"
 }
 
 FLAGS_OPTS = {

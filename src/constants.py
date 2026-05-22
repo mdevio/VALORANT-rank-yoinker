@@ -205,7 +205,7 @@ DEFAULT_CONFIG = {
         "winrate": True,
         "kd": False,
         "level": True,
-        "last_active": True
+        "last_active": False
     },
     "flags": {
         "last_played": True,

@@ -153,5 +153,3 @@ if __name__ == "__main__":
     Requests = Requests(version, log, ErrorSRC)
 
     player_stats = PlayerStats(Requests, log, "a")
-    result = player_stats.get_stats("963ad672-61e1-537e-8449-06ece1a5ceb7")
-    print(result)
