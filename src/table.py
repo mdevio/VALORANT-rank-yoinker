@@ -20,6 +20,7 @@ HEADER_HS_PERCENT = "HS"
 HEADER_WINRATE = "WR"
 HEADER_KD_RATIO = "KD"
 HEADER_LEVEL = "Level"
+HEADER_LAST_ACTIVE = "Last Active"
 HEADER_EARNED_RR = "ΔRR"
 
 
@@ -38,6 +39,7 @@ TABLE_COLUMN_NAMES = Literal[
     HEADER_KD_RATIO,
     HEADER_LEVEL,
     HEADER_EARNED_RR,
+    HEADER_LAST_ACTIVE,
 ]
 
 
@@ -61,6 +63,7 @@ class Table:
             bool(config.table.get("kd", True)),  # KD
             bool(config.table.get("level", True)),  # Level
             bool(config.table.get("earned_rr", True)),  # Earned RR
+            bool(config.table.get("last_active", True)),  # Last Active
         ]
         self.runtime_col_flags = self.col_flags[:]  # making a copy
         
