@@ -15,7 +15,21 @@ class PlayerStats:
             "hs": "N/A",
             "RankedRatingEarned": "N/A",
             "AFKPenalty": "N/A",
+            "LastActiveEpoch": None,
         }
+
+    @staticmethod
+    def _to_int(value, default=0):
+        try:
+            return int(value)
+        except (TypeError, ValueError):
+            return default
+
+    def _should_fetch_comp_stats(self):
+        return any(
+            self.config.get_table_flag(flag)
+            for flag in ("headshot_percent", "kd", "earned_rr", "last_active")
+        )
 
     def _get_match_details_cached(self, match_id):
         """Fetch /match-details once per match_id for this runtime session."""
@@ -39,10 +53,8 @@ class PlayerStats:
         return match_data
 
     def get_stats(self, puuid):
-        # Early exit if no stats are required
-        if not self.config.get_table_flag(
-            "headshot_percent"
-        ) and not self.config.get_table_flag("kd"):
+        # Early exit if no competitive stats are required.
+        if not self._should_fetch_comp_stats():
             return self._default_stats()
 
         # Fetch competitive updates
@@ -67,15 +79,16 @@ class PlayerStats:
         try:
             match_data = self._get_match_details_cached(match_id)
             if match_data is None:
-                return self._default_stats()
+                match_data = {}
         except Exception as e:
             self.log(f"Error fetching match details: {e}")
-            return self._default_stats()
+            match_data = {}
 
         return self._process_match_data(puuid, match_data, match_summary)
 
     def _process_match_data(self, puuid, match_data, match_summary):
-        total_hits, total_headshots, kills, deaths = 0, 0, 0, 0
+        total_hits, total_headshots = 0, 0
+        kills, deaths = None, None
 
         # Extract round stats
         for rround in match_data.get("roundResults", []):
@@ -98,10 +111,21 @@ class PlayerStats:
                 break
 
         # Calculate KD
-        kd = round(kills / deaths, 2) if deaths else kills
+        kd = "N/A" if kills is None else round(kills / deaths, 2) if deaths else kills
 
         ranked_rating_earned = match_summary.get("RankedRatingEarned", "N/A")
         afk_penalty = match_summary.get("AFKPenalty", "N/A")
+        match_info = match_data.get("matchInfo", {}) if isinstance(match_data, dict) else {}
+        last_comp_start = self._to_int(
+            match_summary.get("MatchStartTime") or match_info.get("gameStartMillis"),
+            None,
+        )
+        game_length = self._to_int(match_info.get("gameLengthMillis"), 0)
+        last_active_epoch = (
+            (last_comp_start + game_length) / 1000
+            if last_comp_start is not None
+            else None
+        )
 
         # Compile final stats
         final_stats = {
@@ -109,6 +133,7 @@ class PlayerStats:
             "hs": round((total_headshots / total_hits) * 100) if total_hits else "N/A",
             "RankedRatingEarned": ranked_rating_earned,
             "AFKPenalty": afk_penalty,
+            "LastActiveEpoch": last_active_epoch,
         }
         return final_stats
 
@@ -128,5 +153,3 @@ if __name__ == "__main__":
     Requests = Requests(version, log, ErrorSRC)
 
     player_stats = PlayerStats(Requests, log, "a")
-    result = player_stats.get_stats("963ad672-61e1-537e-8449-06ece1a5ceb7")
-    print(result)
