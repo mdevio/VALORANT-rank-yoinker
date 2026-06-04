@@ -1,6 +1,6 @@
 from src.colors import color
 
-version = "2.97"
+version = "2.98"
 enablePrivateLogging = True
 hide_names = True
 hide_levels = True
