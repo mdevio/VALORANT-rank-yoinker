@@ -38,7 +38,7 @@ class Requests:
     def check_version(version, copy_run_update_script):
         # checking for latest release
         try:
-            r = requests.get("https://api.github.com/mdevio/VALORANT-rank-yoinker/releases")
+            r = requests.get("https://api.github.com/repos/mdevio/VALORANT-rank-yoinker/releases")
         except requests.exceptions.RequestException:
             print(color("[WARNING] Unable to check for updates - skipping...", fore=(255, 165, 0)))
             return

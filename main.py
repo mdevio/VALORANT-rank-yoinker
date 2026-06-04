@@ -821,7 +821,7 @@ try:
                         name = NameColor
 
                         # SKIN
-                        skin = loadouts[player["Subject"]]
+                        skin = loadouts[0].get(player["Subject"], "")
 
                         # RANK
                         rankName = Ranks[playerRank["rank"]]
@@ -870,7 +870,7 @@ try:
                                 party_icon,
                                 agent,
                                 name,
-                                "",
+                                skin,
                                 rankName,
                                 rr,
                                 peakRank,
