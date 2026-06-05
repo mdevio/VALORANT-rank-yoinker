@@ -226,12 +226,10 @@ try:
 
     print("\nvRY Mobile", color(f"- {get_ip()}:{cfg.port}", fore=(255, 127, 80)))
 
-    print(
-        color(
-            "\nVisit https://vry.netlify.app/matchLoadouts to view full player inventories\n",
-            fore=(255, 253, 205),
-        )
-    )
+    match_loadouts_url = "file:///" + os.path.abspath(
+        os.path.join("docs", "matchLoadouts.html")
+    ).replace(os.sep, "/")
+    hyperlink = f"\033]8;;{match_loadouts_url}\033\\View Player Inventories\033]8;;\033\\"
 
     richConsole = RichConsole()
 

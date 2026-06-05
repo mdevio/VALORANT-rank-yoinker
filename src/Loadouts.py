@@ -76,6 +76,7 @@ class Loadouts:
         # get agent dict from main in future
         # names = self.namesClass.get_names_from_puuids(players)
         valoApiSprays = requests.get("https://valorant-api.com/v1/sprays")
+        valoApiFlex = requests.get("https://valorant-api.com/v1/flex")
         valoApiWeapons = requests.get("https://valorant-api.com/v1/weapons")
         valoApiBuddies = requests.get("https://valorant-api.com/v1/buddies")
         valoApiAgents = requests.get("https://valorant-api.com/v1/agents")
@@ -121,7 +122,7 @@ class Loadouts:
             PlayerInventory = loadout_entry
 
             # creates name field
-            if hide_names:
+            if player["PlayerIdentity"].get("Incognito", False):
                 for agent in valoApiAgents.json()["data"]:
                     if agent["uuid"] == player["CharacterID"]:
                         final_json[subject].update(
@@ -156,19 +157,36 @@ class Loadouts:
                     final_json[subject].update(
                         {"Agent": agent["displayIcon"]})
 
-            spray_selections = [
-                s for s in PlayerInventory.get("Expressions", {}).get("AESSelections", [])
-                if s.get("TypeID") == "d5f120f8-ff8c-4aac-92ea-f2b5acbe9475"
-            ]
-            for j, spray in enumerate(spray_selections):
-                final_json[subject]["Sprays"].update({j: {}})
-                for sprayValApi in valoApiSprays.json()["data"]:
-                    if spray["AssetID"].lower() == sprayValApi["uuid"].lower():
-                        final_json[subject]["Sprays"][j].update({
-                            "displayName": sprayValApi["displayName"],
-                            "displayIcon": sprayValApi["displayIcon"],
-                            "fullTransparentIcon": sprayValApi["fullTransparentIcon"]
-                        })
+            sprays_by_uuid = {
+                s["uuid"].lower(): s
+                for s in valoApiSprays.json().get("data", [])
+                if isinstance(s, dict) and s.get("uuid")
+            }
+            flex_by_uuid = {
+                f["uuid"].lower(): f
+                for f in valoApiFlex.json().get("data", [])
+                if isinstance(f, dict) and f.get("uuid")
+            }
+            expression_selections = PlayerInventory.get("Expressions", {}).get("AESSelections", [])
+            for j, expr in enumerate(expression_selections):
+                asset_id = (expr.get("AssetID") or "").lower()
+                if not asset_id:
+                    continue
+
+                expression_data = sprays_by_uuid.get(asset_id)
+                expression_type = "spray" if expression_data else None
+                if expression_data is None:
+                    expression_data = flex_by_uuid.get(asset_id)
+                    expression_type = "flex" if expression_data else "unknown"
+
+                entry = {"type": expression_type}
+                if expression_data:
+                    entry.update({
+                        "displayName": expression_data.get("displayName", ""),
+                        "displayIcon": expression_data.get("displayIcon"),
+                        "fullTransparentIcon": expression_data.get("fullTransparentIcon") or expression_data.get("displayIcon"),
+                    })
+                final_json[subject]["Sprays"].update({j: entry})
 
             # create weapons field
             final_json[subject].update({"Weapons": {}})
