@@ -420,8 +420,12 @@ function getExpressions(player) {
         .sort((a, b) => Number(a.index || 0) - Number(b.index || 0));
 }
 
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
 function getName(player) {
-    return player.Name || agentName(player) || player.Subject || "Unknown";
+    const name = player.Name;
+    if (name && !UUID_RE.test(name)) return name;
+    return agentName(player) || "Unknown";
 }
 
 function agentName(player) {

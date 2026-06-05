@@ -128,7 +128,9 @@ class Loadouts:
                         final_json[subject].update(
                             {"Name": agent["displayName"]})
             else:
-                final_json[subject].update({"Name": names[subject]})
+                player_name = names.get(subject) or names.get(subject.lower(), "")
+                if player_name:
+                    final_json[subject].update({"Name": player_name})
 
             # creates team field
             final_json[subject].update({"Team": player.get("TeamID", team_id)})
