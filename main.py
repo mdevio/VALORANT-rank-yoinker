@@ -433,59 +433,28 @@ try:
                         )
                         playersLoaded += 1
 
-                        if player["Subject"] in stats_data.keys():
-                            if (
-                                player["Subject"] != Requests.puuid
-                                and player["Subject"] not in partyMembersList
-                            ):
-                                curr_player_stat = stats_data[player["Subject"]][-1]
-                                i = 1
-                                while (
-                                    curr_player_stat["match_id"] == coregame.match_id
-                                    and len(stats_data[player["Subject"]]) > i
-                                ):
-                                    i += 1
-                                    curr_player_stat = stats_data[player["Subject"]][-i]
-                                if curr_player_stat["match_id"] != coregame.match_id:
-                                    # checking for party memebers and self players
-                                    times = 0
-                                    m_set = ()
-                                    for m in stats_data[player["Subject"]]:
-                                        if (
-                                            m["match_id"] != coregame.match_id
-                                            and m["match_id"] not in m_set
-                                        ):
-                                            times += 1
-                                            m_set += (m["match_id"],)
-                                    if player["PlayerIdentity"]["Incognito"] == False:
-                                        already_played_with.append(
-                                            {
-                                                "times": times,
-                                                "name": curr_player_stat["name"],
-                                                "agent": curr_player_stat["agent"],
-                                                "time_diff": time.time()
-                                                - curr_player_stat["epoch"],
-                                            }
-                                        )
-                                    else:
-                                        if player["TeamID"] == allyTeam:
-                                            team_string = "your"
-                                        else:
-                                            team_string = "enemy"
-                                        already_played_with.append(
-                                            {
-                                                "times": times,
-                                                "name": agent_dict.get(
-                                                    player["CharacterID"].lower(), "Unknown"
-                                                )
-                                                + " on "
-                                                + team_string
-                                                + " team",
-                                                "agent": curr_player_stat["agent"],
-                                                "time_diff": time.time()
-                                                - curr_player_stat["epoch"],
-                                            }
-                                        )
+                        if (
+                            player["Subject"] != Requests.puuid
+                            and player["Subject"] not in partyMembersList
+                        ):
+                            current_relation = "ally" if player["TeamID"] == allyTeam else "enemy"
+                            summary = stats.build_encounter_summary(
+                                stats_data,
+                                player["Subject"],
+                                coregame.match_id,
+                                fallback_name=names.get(player["Subject"], "#"),
+                                fallback_relation=current_relation,
+                            )
+                            if summary is not None:
+                                if player["PlayerIdentity"]["Incognito"]:
+                                    team_string = "your" if player["TeamID"] == allyTeam else "enemy"
+                                    summary["name"] = (
+                                        agent_dict.get(player["CharacterID"].lower(), "Unknown")
+                                        + " on "
+                                        + team_string
+                                        + " team"
+                                    )
+                                already_played_with.append(summary)
 
                         party_icon = ""
                         # set party premade icon
@@ -685,6 +654,11 @@ try:
                                     "rr": rr,
                                     "match_id": coregame.match_id,
                                     "epoch": time.time(),
+                                    "relation": "ally" if player["TeamID"] == allyTeam else "enemy",
+                                    "team": player["TeamID"],
+                                    "my_team": allyTeam,
+                                    "result": None,
+                                    "score": None,
                                 }
                             }
                         )
@@ -1093,9 +1067,7 @@ try:
                     if len(already_played_with) > 0:
                         print("\n")
                         for played in already_played_with:
-                            print(
-                                f"Already played with {played['name']} (last {played['agent']}) {stats.convert_time(played['time_diff'])} ago. (Total played {played['times']} times)"
-                            )
+                            print(stats.format_encounter_summary(played))
                 already_played_with = []
         if cfg.cooldown == 0:
             input("Press enter to fetch again...")
