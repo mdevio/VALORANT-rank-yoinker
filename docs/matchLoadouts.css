@@ -106,6 +106,19 @@ h3 {
     gap: 0 20px;
 }
 
+.teams-layout.is-unified {
+    grid-template-columns: 1fr;
+}
+
+.teams-layout.is-unified .team-divider,
+.teams-layout.is-unified .team-section + .team-section {
+    display: none;
+}
+
+.teams-layout.is-unified .players-grid {
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+}
+
 .team-section {
     min-width: 0;
 }

@@ -177,6 +177,10 @@ function renderPlayers() {
     els.blueGrid.replaceChildren();
     els.redGrid.replaceChildren();
 
+    const teams = new Set(state.players.map((p) => p.Team).filter(Boolean));
+    const isSingleTeam = teams.size <= 1;
+    document.querySelector(".teams-layout").classList.toggle("is-unified", isSingleTeam);
+
     state.players.forEach((player) => {
         const button = document.createElement("button");
         button.type = "button";
@@ -213,7 +217,8 @@ function renderPlayers() {
         identity.append(name, agent, meta, action);
         button.append(avatar, identity, buildPreviewRow(player));
 
-        const grid = player.Team === "Red" ? els.redGrid : els.blueGrid;
+        // In single-team modes (e.g. deathmatch) put everyone in one grid
+        const grid = (!isSingleTeam && player.Team === "Red") ? els.redGrid : els.blueGrid;
         grid.append(button);
     });
 }
