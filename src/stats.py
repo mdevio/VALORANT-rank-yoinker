@@ -194,6 +194,7 @@ class Stats:
         stats_data = self.read_data()
         changed = False
         my_result = "win" if my_team == winning_team else "loss"
+        enemy_result = "loss" if my_team == winning_team else "win"
 
         for puuid, history in list(stats_data.items()):
             normalised_history = self._normalise_history(history)
@@ -204,8 +205,9 @@ class Stats:
                 if entry.get("match_id") != match_id:
                     continue
 
+                result = enemy_result if entry.get("relation") == "enemy" else my_result
                 updates = {
-                    "result": my_result,
+                    "result": result,
                     "winning_team": winning_team,
                     "score": score,
                 }

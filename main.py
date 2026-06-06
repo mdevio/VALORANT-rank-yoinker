@@ -544,6 +544,7 @@ try:
                     already_played_with = []
                     stats_data = stats.read_data()
 
+                    allyTeam = None
                     for p in Players:
                         if p["Subject"] == Requests.puuid:
                             allyTeam = p["TeamID"]
