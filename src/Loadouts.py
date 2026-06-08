@@ -122,15 +122,13 @@ class Loadouts:
             PlayerInventory = loadout_entry
 
             # creates name field
-            if player["PlayerIdentity"].get("Incognito", False):
+            if hide_names:
                 for agent in valoApiAgents.json()["data"]:
-                    if agent["uuid"] == player["CharacterID"]:
+                    if agent["uuid"] == player.get("CharacterID", ""):
                         final_json[subject].update(
                             {"Name": agent["displayName"]})
             else:
-                player_name = names.get(subject) or names.get(subject.lower(), "")
-                if player_name:
-                    final_json[subject].update({"Name": player_name})
+                final_json[subject].update({"Name": names[subject]})
 
             # creates team field
             final_json[subject].update({"Team": player.get("TeamID", team_id)})

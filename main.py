@@ -230,6 +230,7 @@ try:
         os.path.join("docs", "matchLoadouts.html")
     ).replace(os.sep, "/")
     hyperlink = f"\033]8;;{match_loadouts_url}\033\\View Player Inventories\033]8;;\033\\"
+    print(color(f"\n{hyperlink}", fore=(255, 253, 205)))
 
     richConsole = RichConsole()
 
