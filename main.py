@@ -9,6 +9,7 @@ import requests
 import urllib3
 from src.colors import color as colr
 from InquirerPy import inquirer
+from pathlib import Path
 from rich.console import Console as RichConsole
 
 from src.colors import Colors
@@ -226,11 +227,17 @@ try:
 
     print("\nvRY Mobile", color(f"- {get_ip()}:{cfg.port}", fore=(255, 127, 80)))
 
-    match_loadouts_url = "file:///" + os.path.abspath(
-        os.path.join("docs", "matchLoadouts.html")
-    ).replace(os.sep, "/")
-    hyperlink = f"\033]8;;{match_loadouts_url}\033\\View Player Inventories\033]8;;\033\\"
-    print(color(f"\n{hyperlink}", fore=(255, 253, 205)))
+    inventories_url = Path("docs/matchLoadouts.html").resolve().as_uri()
+    inventories_link = (
+        f"\033]8;;{inventories_url}\033\\"
+        "View in browser"
+        f"\033]8;;\033\\"
+    )
+
+    print(
+        "\nPlayer Inventories",
+        color(f"- {inventories_link}", fore=(255, 127, 80)),
+    )
 
     richConsole = RichConsole()
 
