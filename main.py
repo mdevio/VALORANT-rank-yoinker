@@ -9,6 +9,7 @@ import requests
 import urllib3
 from src.colors import color as colr
 from InquirerPy import inquirer
+from pathlib import Path
 from rich.console import Console as RichConsole
 
 from src.colors import Colors
@@ -331,11 +332,16 @@ try:
 
     print("\nvRY Mobile", color(f"- {get_ip()}:{cfg.port}", fore=(255, 127, 80)))
 
+    inventories_url = Path("docs/matchLoadouts.html").resolve().as_uri()
+    inventories_link = (
+        f"\033]8;;{inventories_url}\033\\"
+        "View in browser"
+        f"\033]8;;\033\\"
+    )
+
     print(
-        color(
-            "\nVisit https://vry.netlify.app/matchLoadouts to view full player inventories\n",
-            fore=(255, 253, 205),
-        )
+        "\nPlayer Inventories",
+        color(f"- {inventories_link}", fore=(255, 127, 80)),
     )
 
     richConsole = RichConsole()
