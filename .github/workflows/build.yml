@@ -1,7 +1,8 @@
 name: Build
 
 env:
-  PYTHON_VERSION: '3.10'
+  PYTHON_VERSION: '3.14.5'
+  PYTHON_BUILD_VERSION: '3.14'
 
 on:
   push:
@@ -11,21 +12,17 @@ on:
   pull_request:
     types: [review_requested]
 
+  workflow_dispatch:
+
 jobs:
-  specific_review_requested:
-    
-    runs-on: windows-latest
-    steps: 
-      - run: echo 'A review was requested from the devs'
-      
   build:
-  
     runs-on: windows-latest
+
     steps:
       - uses: actions/checkout@v4
       
       - name: Set up Python ${{ env.PYTHON_VERSION }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v6
         with:
           python-version: ${{ env.PYTHON_VERSION }}
           cache: pip
@@ -41,13 +38,30 @@ jobs:
       
       - name: Build Native Executable
         run: python setup.py build
-      
-      - name: Get commit hash
+
+      - name: Copy docs into build output
+        shell: pwsh
+        run: |
+          Copy-Item -Path "docs" -Destination "build/exe.win-amd64-${{ env.PYTHON_BUILD_VERSION }}/docs" -Recurse -Force
+
+      - name: Get short commit hash
         id: commit
-        uses: pr-mpt/actions-commit-hash@v1
-      
+        shell: pwsh
+        env:
+          COMMIT_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          $short = $env:COMMIT_SHA.Substring(0, 7)
+          "short=$short" >> $env:GITHUB_OUTPUT
+
+      - name: Show build output
+        shell: pwsh
+        run: |
+          python --version
+          Get-ChildItem "build/exe.win-amd64-${{ env.PYTHON_BUILD_VERSION }}" -Recurse
+          
       - name: Upload Compiled Version
         uses: actions/upload-artifact@v4
         with:
           name: VALORANT-rank-yoinker-${{ steps.commit.outputs.short }}
-          path: build/exe.win-amd64-${{ env.PYTHON_VERSION }}/**
+          path: build/exe.win-amd64-${{ env.PYTHON_BUILD_VERSION }}/**
+          if-no-files-found: error
