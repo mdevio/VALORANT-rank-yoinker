@@ -52,7 +52,8 @@
 
 > `-` You can change the desired weapon by editing the gun in `config.json`, or by deleting the file for vRY re-prompt you.
 
-> `-` View all skins: <https://vry.netlify.app/matchLoadouts>.
+> `-` View player inventories/loadouts with the bundled local viewer shown in the terminal output.  
+> Legacy hosted viewer: <https://vry.netlify.app/matchLoadouts> (not maintained by this fork).
 
 ### Letting Github Build It:
 
