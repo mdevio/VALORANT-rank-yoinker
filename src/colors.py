@@ -33,6 +33,7 @@ class Colors:
 
         orig_name = name
         party_members = party_members or []
+        team_color = (76, 151, 237)
 
         if agent is not None and self.hide_names:
             name = self.agent_dict.get(agent.lower(), "Player") if agent else "Player"
@@ -42,11 +43,8 @@ class Colors:
         if playerPuuid == selfPuuid:
             return color(orig_name, fore=(221, 224, 41))
 
-        if is_single_team:
+        if is_single_team or my_team is None or team == my_team:
             team_color = (238, 77, 77)
-        else:
-            enemy = my_team and team != my_team
-            team_color = (238, 77, 77) if enemy else (76, 151, 237)
 
         return color(display_name, fore=team_color)
 
