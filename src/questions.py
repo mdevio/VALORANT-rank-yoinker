@@ -18,7 +18,7 @@ TABLE_OPTS = {
 FLAGS_OPTS = {
 	"last_played": "Last Played Stats",
 	"auto_hide_leaderboard": "Auto Hide Leaderboard Column",
-    "pre_cls": "Pre-Clear Screen",
+    "pre_cls": "Pre-Clear Screen on each game.",
     "game_chat": "Print Game Chat",
     "peak_rank_act": "Peak Rank Act",
     "discord_rpc": "Discord Rich Presence",
@@ -27,7 +27,6 @@ FLAGS_OPTS = {
     "short_ranks": "Short rank names instead of long ones",
     "truncate_skins": "Truncate long skin names if the window is too small",
     "truncate_names": "Truncate long player names if the window is too small",
-    "clear_on_update": "Clear console on each match",
 }
 
 weapon_question = lambda config: {

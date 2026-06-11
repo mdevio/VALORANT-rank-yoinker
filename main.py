@@ -331,8 +331,7 @@ try:
                 _retry_pending(match_id, pending, "request failed")
 
     def print_info():
-        print(firstPrint)
-        if cfg.get_feature_flag("clear_on_update") or firstPrint:
+        if cfg.get_feature_flag("pre_cls") or firstPrint:
             os.system("cls")
             print("\nvRY Mobile", color(f"- {get_ip()}:{cfg.port}", fore=(255, 127, 80)))
 
