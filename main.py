@@ -331,7 +331,8 @@ try:
                 _retry_pending(match_id, pending, "request failed")
 
     def print_info():
-        if cfg.get_feature_flag("clear_on_update"):
+        print(firstPrint)
+        if cfg.get_feature_flag("clear_on_update") or firstPrint:
             os.system("cls")
             print("\nvRY Mobile", color(f"- {get_ip()}:{cfg.port}", fore=(255, 127, 80)))
 
@@ -451,8 +452,7 @@ try:
                 "MENUS": color("In-Menus", fore=(238, 241, 54)),
             }
 
-            if (not firstPrint) and cfg.get_feature_flag("pre_cls"):
-                os.system("cls")
+
             print_info()
 
             is_leaderboard_needed = False
