@@ -654,7 +654,7 @@ try:
                             )
                         if lastTeam != player["TeamID"]:
                             if lastTeamBoolean:
-                                table.add_empty_row()
+                                table.add_separator_row()
                         lastTeam = player["TeamID"]
                         lastTeamBoolean = True
                         if player["PlayerIdentity"]["HideAccountLevel"]:
