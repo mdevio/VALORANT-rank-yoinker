@@ -28,7 +28,7 @@ class Colors:
         self.log = log
 
     def get_color_from_team(
-        self, team, name, playerPuuid, selfPuuid, agent=None, party_members=None
+        self, team, name, playerPuuid, selfPuuid, agent=None, party_members=None, my_team=None
     ):
         orig_name = name
         if agent is not None:
@@ -37,18 +37,18 @@ class Colors:
                     name = self.agent_dict.get(agent.lower(), "Player")
                 else:
                     name = "Player"
-        if team == "Red":
+        
+        if my_team and team != my_team:
             if playerPuuid not in party_members:
                 Teamcolor = color(name, fore=(238, 77, 77))
             else:
                 Teamcolor = color(orig_name, fore=(238, 77, 77))
-        elif team == "Blue":
+        else:
             if playerPuuid not in party_members:
                 Teamcolor = color(name, fore=(76, 151, 237))
             else:
                 Teamcolor = color(orig_name, fore=(76, 151, 237))
-        else:
-            Teamcolor = ""
+        
         if playerPuuid == selfPuuid:
             Teamcolor = color(orig_name, fore=(221, 224, 41))
         return Teamcolor

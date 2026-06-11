@@ -540,20 +540,22 @@ try:
                         ),
                         reverse=True,
                     )
-                    Players.sort(key=lambda Players: Players["TeamID"], reverse=True)
-                    partyCount = 0
-                    partyNum = 0
-                    partyIcons = {}
-                    lastTeamBoolean = False
-                    lastTeam = "Red"
-
-                    already_played_with = []
-                    stats_data = stats.read_data()
 
                     allyTeam = None
                     for p in Players:
                         if p["Subject"] == Requests.puuid:
                             allyTeam = p["TeamID"]
+
+                    Players.sort(key=lambda p: (p["TeamID"] != allyTeam, p["Subject"] != Requests.puuid))
+                    
+                    partyCount = 0
+                    partyNum = 0
+                    partyIcons = {}
+                    lastTeamBoolean = False
+                    lastTeam = "Red"
+                    already_played_with = []
+                    stats_data = stats.read_data()
+
                     if coregame_match_id and allyTeam:
                         active_match_context["match_id"] = coregame_match_id
                         active_match_context["my_team"] = allyTeam
@@ -639,6 +641,7 @@ try:
                                 Requests.puuid,
                                 agent=player["CharacterID"],
                                 party_members=partyMembersList,
+                                my_team=allyTeam,
                             )
                         else:
                             Namecolor = colors.get_color_from_team(
@@ -647,6 +650,7 @@ try:
                                 player["Subject"],
                                 Requests.puuid,
                                 party_members=partyMembersList,
+                                my_team=allyTeam,
                             )
                         if lastTeam != player["TeamID"]:
                             if lastTeamBoolean:
