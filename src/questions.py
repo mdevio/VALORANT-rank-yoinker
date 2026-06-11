@@ -27,7 +27,7 @@ FLAGS_OPTS = {
     "short_ranks": "Short rank names instead of long ones",
     "truncate_skins": "Truncate long skin names if the window is too small",
     "truncate_names": "Truncate long player names if the window is too small",
-
+    "clear_on_update": "Clear console on each match",
 }
 
 weapon_question = lambda config: {
