@@ -28,30 +28,27 @@ class Colors:
         self.log = log
 
     def get_color_from_team(
-        self, team, name, playerPuuid, selfPuuid, agent=None, party_members=None, my_team=None
-    ):
+            self, team, name, playerPuuid, selfPuuid, agent=None, party_members=None, my_team=None, is_single_team=False
+        ):
+
         orig_name = name
-        if agent is not None:
-            if self.hide_names:
-                if agent != "":
-                    name = self.agent_dict.get(agent.lower(), "Player")
-                else:
-                    name = "Player"
-        
-        if my_team and team != my_team:
-            if playerPuuid not in party_members:
-                Teamcolor = color(name, fore=(238, 77, 77))
-            else:
-                Teamcolor = color(orig_name, fore=(238, 77, 77))
-        else:
-            if playerPuuid not in party_members:
-                Teamcolor = color(name, fore=(76, 151, 237))
-            else:
-                Teamcolor = color(orig_name, fore=(76, 151, 237))
-        
+        party_members = party_members or []
+
+        if agent is not None and self.hide_names:
+            name = self.agent_dict.get(agent.lower(), "Player") if agent else "Player"
+
+        display_name = orig_name if playerPuuid in party_members else name
+
         if playerPuuid == selfPuuid:
-            Teamcolor = color(orig_name, fore=(221, 224, 41))
-        return Teamcolor
+            return color(orig_name, fore=(221, 224, 41))
+
+        if is_single_team:
+            team_color = (238, 77, 77)
+        else:
+            enemy = my_team and team != my_team
+            team_color = (238, 77, 77) if enemy else (76, 151, 237)
+
+        return color(display_name, fore=team_color)
 
     def get_rgb_color_from_skin(self, skin_id, valoApiSkins):
         json_data = valoApiSkins.json()

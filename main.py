@@ -548,6 +548,9 @@ try:
 
                     Players.sort(key=lambda p: (p["TeamID"] != allyTeam, p["Subject"] != Requests.puuid))
                     
+                    unique_teams = set(p["TeamID"] for p in Players)
+                    is_single_team = len(unique_teams) <= 1
+                    
                     partyCount = 0
                     partyNum = 0
                     partyIcons = {}
@@ -642,6 +645,7 @@ try:
                                 agent=player["CharacterID"],
                                 party_members=partyMembersList,
                                 my_team=allyTeam,
+                                is_single_team=is_single_team,
                             )
                         else:
                             Namecolor = colors.get_color_from_team(
@@ -651,6 +655,7 @@ try:
                                 Requests.puuid,
                                 party_members=partyMembersList,
                                 my_team=allyTeam,
+                                is_single_team=is_single_team,
                             )
                         if lastTeam != player["TeamID"]:
                             if lastTeamBoolean:
