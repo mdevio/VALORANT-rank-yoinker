@@ -14,7 +14,6 @@ class Loadouts:
         self.current_map = current_map
 
     def get_match_loadouts(self, match_id, players, weaponChoose, valoApiSkins, names, state="game"):
-        playersBackup = players
         weaponLists = {}
         valApiWeapons = requests.get(
             "https://valorant-api.com/v1/weapons").json()
@@ -95,14 +94,15 @@ class Loadouts:
         elif state == "game":
             PlayerInventorys = PlayerInventorys["Loadouts"]
 
-        # subject (player UUID) -> loadout lookup
+        # subject (player UUID) -> full loadout entry lookup
         loadout_by_subject = {}
         for entry in PlayerInventorys:
             subj = entry.get("Subject", "").lower()
             # if player has an agent != spectator
             char_id = entry.get("CharacterID", "")
             if subj and (state == "pregame" or char_id):
-                loadout_by_subject[subj] = entry.get("Loadout", entry)
+                # Keep the full entry so metadata like CharacterID is not lost.
+                loadout_by_subject[subj] = entry
 
         for player in players:
             subject = player["Subject"]
@@ -119,18 +119,32 @@ class Loadouts:
             if loadout_entry is None:
                 continue
 
-            PlayerInventory = loadout_entry
+            PlayerInventory = loadout_entry.get("Loadout", loadout_entry)
+
+            # Riot can return CharacterID in different places and with different casing.
+            # Keep Name separate: only use the agent name as Name when hide_names is enabled.
+            character_id = (
+                player.get("CharacterID")
+                or loadout_entry.get("CharacterID")
+                or PlayerInventory.get("CharacterID")
+                or ""
+            ).lower()
 
             # creates name field
             if hide_names:
-                for agent in valoApiAgents.json()["data"]:
-                    if agent["uuid"] == player.get("CharacterID", ""):
-                        final_json[subject].update(
-                            {"Name": agent["displayName"]})
+                if state == "game":
+                    for agent in valoApiAgents.json()["data"]:
+                        if agent["uuid"].lower() == character_id:
+                            final_json[subject].update(
+                                {"Name": agent["displayName"]})
+                            break
             else:
-                player_name = names.get(subject) or names.get(subject.lower(), "")
-                if player_name:
+                player_name = names.get(subject) or names.get(subject.lower())
+
+                if player_name and player_name != "#":
                     final_json[subject].update({"Name": player_name})
+                else:
+                    final_json[subject].update({"Name": None})
 
             # creates team field
             final_json[subject].update({"Team": player.get("TeamID", team_id)})
@@ -153,11 +167,12 @@ class Loadouts:
                         {"PlayerCard": PCard["largeArt"]})
 
             for agent in valoApiAgents.json()["data"]:
-                if agent["uuid"] == player["CharacterID"]:
+                if agent["uuid"].lower() == character_id:
                     final_json[subject].update(
                         {"AgentArtworkName": agent["displayName"] + "Artwork"})
                     final_json[subject].update(
                         {"Agent": agent["displayIcon"]})
+                    break
 
             sprays_by_uuid = {
                 s["uuid"].lower(): s
