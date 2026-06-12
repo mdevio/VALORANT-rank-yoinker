@@ -41,6 +41,8 @@ from src.account_manager.account_auth import AccountAuth
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
+PROJECT_ROOT = Path(__file__).parent.resolve()
+
 os.system(f"title VALORANT rank yoinker v{version}")
 
 server = ""
@@ -332,7 +334,7 @@ try:
 
     print("\nvRY Mobile", color(f"- {get_ip()}:{cfg.port}", fore=(255, 127, 80)))
 
-    inventories_url = Path("docs/matchLoadouts.html").resolve().as_uri()
+    inventories_url = (PROJECT_ROOT / Path("docs/matchLoadouts.html")).resolve().as_uri()
     inventories_link = (
         f"\033]8;;{inventories_url}\033\\"
         "View in browser"
