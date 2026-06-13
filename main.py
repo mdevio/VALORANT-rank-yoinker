@@ -337,12 +337,12 @@ try:
             os.system("cls")
             print("\nvRY Mobile", color(f"- {get_ip()}:{cfg.port}", fore=(255, 127, 80)))
 
-    inventories_url = (PROJECT_ROOT / Path("docs/matchLoadouts.html")).resolve().as_uri()
-    inventories_link = (
-        f"\033]8;;{inventories_url}\033\\"
-        "View in browser"
-        f"\033]8;;\033\\"
-    )
+            inventories_url = (PROJECT_ROOT / Path("docs/matchLoadouts.html")).resolve().as_uri()
+            inventories_link = (
+                f"\033]8;;{inventories_url}\033\\"
+                "View in browser"
+                f"\033]8;;\033\\"
+            )
 
             print(
                 "\nPlayer Inventories",

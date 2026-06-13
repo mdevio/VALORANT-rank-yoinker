@@ -18,7 +18,7 @@ TABLE_OPTS = {
 FLAGS_OPTS = {
 	"last_played": "Last Played Stats",
 	"auto_hide_leaderboard": "Auto Hide Leaderboard Column",
-    "pre_cls": "Pre-Clear Screen on each game.",
+    "pre_cls": "Pre-Clear Screen on each game update.",
     "game_chat": "Print Game Chat",
     "peak_rank_act": "Peak Rank Act",
     "discord_rpc": "Discord Rich Presence",
