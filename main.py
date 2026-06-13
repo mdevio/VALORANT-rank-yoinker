@@ -332,19 +332,22 @@ try:
                 log(f"failed encounter result update for match {match_id}: {error}")
                 _retry_pending(match_id, pending, "request failed")
 
-    print("\nvRY Mobile", color(f"- {get_ip()}:{cfg.port}", fore=(255, 127, 80)))
+    def print_info():
+        if cfg.get_feature_flag("pre_cls") or firstPrint:
+            os.system("cls")
+            print("\nvRY Mobile", color(f"- {get_ip()}:{cfg.port}", fore=(255, 127, 80)))
 
-    inventories_url = (PROJECT_ROOT / Path("docs/matchLoadouts.html")).resolve().as_uri()
-    inventories_link = (
-        f"\033]8;;{inventories_url}\033\\"
-        "View in browser"
-        f"\033]8;;\033\\"
-    )
+            inventories_url = (PROJECT_ROOT / Path("docs/matchLoadouts.html")).resolve().as_uri()
+            inventories_link = (
+                f"\033]8;;{inventories_url}\033\\"
+                "View in browser"
+                f"\033]8;;\033\\"
+            )
 
-    print(
-        "\nPlayer Inventories",
-        color(f"- {inventories_link}", fore=(255, 127, 80)),
-    )
+            print(
+                "\nPlayer Inventories",
+                color(f"- {inventories_link}", fore=(255, 127, 80)),
+            )
 
     richConsole = RichConsole()
 
@@ -450,8 +453,8 @@ try:
                 "MENUS": color("In-Menus", fore=(238, 241, 54)),
             }
 
-            if (not firstPrint) and cfg.get_feature_flag("pre_cls"):
-                os.system("cls")
+
+            print_info()
 
             is_leaderboard_needed = False
             

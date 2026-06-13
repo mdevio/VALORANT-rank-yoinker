@@ -218,6 +218,6 @@ DEFAULT_CONFIG = {
         "server_id": False,
         "short_ranks": False,
         "truncate_skins": True,
-        "truncate_names": True,
+        "truncate_names": True
     }
 }
