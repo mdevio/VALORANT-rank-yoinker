@@ -2530,19 +2530,6 @@ function syncSettingsUI() {
                     if (
                         input.checked
                     ) {
-
-                        if (
-                            selected.length >= 3
-                        ) {
-
-                            input.checked =
-                                false;
-
-                            return;
-
-                        }
-
-
                         selected.push(
                             weaponName
                         );
