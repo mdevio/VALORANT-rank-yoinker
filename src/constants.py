@@ -3,7 +3,7 @@ from src.colors import color
 
 PROJECT_ROOT = Path(__file__).parent.parent.resolve()
 
-version = "3.0"
+version = "3.0.1"
 enablePrivateLogging = True
 hide_names = True
 hide_levels = True
@@ -22,6 +22,8 @@ gamemodes = {
     "snowball": "Snowball Fight",
     "valaram": "All Random One Site",
     "dodgeball": "Knockout",
+    "abilitydraftarena": "Gauntlet: Glitched",
+    "skirmish2v2": "Skirmish: 2v2",
     "": "Custom",
 }
 
