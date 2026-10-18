@@ -46,6 +46,7 @@ const WEAPON_COLUMNS = [
                 weapons: [
                     "Bulldog",
                     "Guardian",
+                    "Warden",
                     "Phantom",
                     "Vandal",
                 ],

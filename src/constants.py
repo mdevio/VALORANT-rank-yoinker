@@ -184,6 +184,7 @@ WEAPONS = [
     "Judge",
     "Bulldog",
     "Guardian",
+    "Warden",
     "Phantom",
     "Vandal",
     "Marshal",
