@@ -51,7 +51,7 @@ class Requests:
                 if "zip" in asset["content_type"]:
                         link = asset["browser_download_url"] # link for the latest release
                         break
-            if float(release_version) > float(version):
+            if tuple(map(int, release_version.split("."))) > tuple(map(int, version.split("."))):
                 print(color("[UPDATE] New version available!", fore=(0, 255, 0)))
                 if sys.argv[0][-3:] == "exe":
                     while True:
