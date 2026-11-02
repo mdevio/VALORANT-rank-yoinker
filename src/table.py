@@ -128,8 +128,15 @@ class Table:
             zip(self.field_names_candidates, "" * len(self.field_names_candidates))
         )
 
+    def add_separator_row(self):
+        self.rows.append(None)
+
     def apply_rows(self):
         for row in self.rows:
+            if row is None:
+                self.rich_table.add_row(*["" for _ in self.fields_to_display], end_section=True)
+                continue
+
             row = [
                 self.ansi_to_console(str(v))
                 for i, v in row
